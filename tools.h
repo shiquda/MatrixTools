@@ -44,3 +44,17 @@ Mat matriplus(){
     return res_mat;
 }
 
+Mat nummulti(){
+    cout << "欢迎使用矩阵数乘功能！\n ";
+    cout << "请输入一个实数：";
+    double k;cin>>k;
+    cout << "请输入矩阵：\n";
+    Mat a = readMat();
+    for(int i = 0;i<a.n;i++){
+        for(int j = 0;j<a.m;j++){
+            a.value[i][j] *= k;
+        }
+    }
+    return a;
+}
+
