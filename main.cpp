@@ -1,32 +1,37 @@
 #include <conio.h>
 #include <iostream>
 
-#include "tools.h"
+#include "tools.hpp"
 // #include <opencv2/opencv.hpp>
 // using namespace cv;
 using namespace std;
 
-
-// 此框架若有不完美可以在作业中任意修改
-struct Mat {
-    int m, n;  // 长度 
-    value[10001][10001]{ 0 };
-};
-
 void wait_for_enter()
 {
     cout << endl
-        << "按回车键继续";
+         << "按回车键继续...";
     while (_getch() != '\r')
         ;
     cout << endl
-        << endl;
+         << endl;
 }
 
-void menu(){
-    cout << "欢迎来到 Matrix Tools\n"
-        <<"请选择功能：\n1 矩阵相加\t2 矩阵数乘\t3 矩阵转置\n4 矩阵相乘\t5 矩阵 handi\t6 \n7 \t8 \t9 \n0 退出程序"
-        << "请输入功能 (0~9): ";
+void menu()
+{
+    cout << "欢迎使用 Matrix Tools! Created with love by @shiquda\n"
+        <<    
+ R"(
+  __  __           _            _            _____                   _         _ 
+ |  \/  |   __ _  | |_   _ __  (_) __  __   |_   _|   ___     ___   | |  ___  | |
+ | |\/| |  / _` | | __| | '__| | | \ \/ /     | |    / _ \   / _ \  | | / __| | |
+ | |  | | | (_| | | |_  | |    | |  >  <      | |   | (_) | | (_) | | | \__ \ |_|
+ |_|  |_|  \__,_|  \__| |_|    |_| /_/\_\     |_|    \___/   \___/  |_| |___/ (_)                                                                      
+ )"
+         << "请选择功能：\n1 矩阵相加\t2 矩阵数乘\t3 矩阵转置\n"
+        "4 矩阵相乘\t5 矩阵 handi\t6 \n"
+        "7 \t8 \t9 \n"
+        "0 退出程序\n"
+         << "请输入功能 (0~9): ";
 }
 void demo()
 {
@@ -43,55 +48,61 @@ void demo()
 
 int main()
 {
-    // 定义相关变量
-
-    wait_for_enter();
-    while (true) // 注意该循环退出的条件
+    while (true)
     {
-        system("cls"); // 清屏函数
+        system("cls");
 
-        menu(); // 调用菜单显示函数，自行补充完成
-
-        // 按要求输入菜单选择项choice
-
+        menu();
+        char choice;
+        cin >> choice;
         if (choice == '0') // 选择退出
         {
-            cout << "\n 确定退出吗?" << endl;
+            cout << "\n 确定退出吗? 确认请输入Y，输入任意其他键则取消退出：" << endl;
+            char ch;
             cin >> ch;
-            if (ch == 'y' || ch == 'Y')
+            if (ch == 'y' || ch == 'Y') {
+                cout << "Bye~\n";
                 break;
-            else
-                continue;
+            }
+            else continue;
         }
 
         switch (choice)
         {
-            // 下述矩阵操作函数自行设计并完成（包括函数参数及返回类型等），若选择加分项，请自行补充
         case '1':
+            system("cls");
             matriplus();
             break;
         case '2':
+            system("cls");
             nummulti();
             break;
         case '3':
+            system("cls");
             matritrans();
             break;
         case '4':
+            system("cls");
             matrimulti();
             break;
         case '5':
+            system("cls");
             hadamulti();
             break;
         case '6':
+            system("cls");
             conv();
             break;
-        case '7':
-            demo();
-            break;
+        // case '7':
+        // system("cls");
+        //     demo();
+        //     break;
         default:
-            cout << "\n 输入错误，请从新输入" << endl;
-            wait_for_enter();
+            system("cls");
+            cout << "输入错误，请再次输入！\n" << endl;
+            menu();
         }
+        wait_for_enter();
     }
     return 0;
 }
