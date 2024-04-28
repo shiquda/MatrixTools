@@ -49,6 +49,22 @@ Mat mat_transpose(Mat a) {
     return res_mat;
 }
 
+Mat mat_mult(Mat a, Mat b) { // 默认认为矩阵是和规的，在上层函数检查
+    Mat res_mat;
+    res_mat.n = a.n;
+    res_mat.m = b.m;
+    for (int i = 0; i < a.n; i++)
+    {
+        for (int j = 0; j < b.m; j++)
+        {
+            for (int k = 0; k < a.n; k++)
+            {
+                res_mat.value[i][j] += a.value[i][k] * b.value[k][j];
+            }
+        }
+    }
+    return res_mat;
+}
 // 矩阵I/O
 Mat read_mat(int n = -1, int m = -1)
 {
@@ -122,7 +138,14 @@ void matritrans()
 
 void matrimulti()
 {
-    cout << "功能尚未实现，敬请期待！";
+    cout << "欢迎使用矩阵相乘功能！\n";
+    cout << "请输入第一个矩阵：\n";
+    Mat mat1 = read_mat();
+    cout << "请输入第二个矩阵：\n";
+    Mat mat2 = read_mat(mat1.m, mat1.n);
+    Mat res_mat = mat_mult(mat1, mat2);
+    cout << "相乘积的结果是：\n";
+    show_mat(res_mat);
 }
 
 void hadamulti()
