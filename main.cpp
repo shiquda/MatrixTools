@@ -6,10 +6,11 @@
 // using namespace cv;
 using namespace std;
 
-    int m; int n;
-    long double va
+
 // 此框架若有不完美可以在作业中任意修改
-struct Mat {lue[10001][10001]{ 0 };
+struct Mat {
+    int m, n;  // 长度 
+    value[10001][10001]{ 0 };
 };
 
 void wait_for_enter()
@@ -22,6 +23,11 @@ void wait_for_enter()
         << endl;
 }
 
+void menu(){
+    cout << "欢迎来到 Matrix Tools\n"
+        <<"请选择功能：\n1 矩阵相加\t2 矩阵数乘\t3 矩阵转置\n4 矩阵相乘\t5 矩阵 handi\t6 \n7 \t8 \t9 \n0 退出程序"
+        << "请输入功能 (0~9): ";
+}
 void demo()
 {
     // /* 对vs+opencv正确配置后方可使用，此处只给出一段读取并显示图像的参考代码，其余功能流程自行设计和查阅文献 */
