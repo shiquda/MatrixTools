@@ -170,7 +170,7 @@ void hadamulti()
     Mat mat1 = read_mat();
     cout << "请输入第二个矩阵：\n";
     Mat mat2 = read_mat(mat1.n, mat1.m);
-    Mat res_mat = mat_add(mat1, mat2);
+    Mat res_mat = mat_hada_mult(mat1, mat2);
     cout << "矩阵 Hadamard 乘积的结果是：\n";
     show_mat(res_mat);
 }
