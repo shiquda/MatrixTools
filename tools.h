@@ -19,8 +19,7 @@ Mat readMat(int n= -1, int m =  -1){
     return Mat;
 }
 
-
-void matriplus(){
+mat matriplus(){
     cout << "欢迎使用矩阵相加功能！\n ";
     cout << "请输入第一个矩阵：\n"
     Mat mat1 = readMat();
