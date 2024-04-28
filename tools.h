@@ -11,15 +11,23 @@ Mat readMat(int n= -1, int m =  -1){
     cout<<"请输入一个" << n "行 " << m "列的矩阵, 数字直接以空格分割: \n";
     Mat matrix;
     matrix.n =  n;matrix.m =m;
-    for(int i = 0;i<n;i++){
-        for(int j = 0;j<m;j++){
+    for(int i = 0;i<a.n;i++){
+        for(int j = 0;j<a.m;j++){
             cin >> matrix.value[i][j];
         }
     }
     return Mat;
 }
 
-mat matriplus(){
+void showMat(mat a){
+    for(int i = 0;i<n;i++){
+        for(int j = 0;j<m;j++){
+            cout << a.value[i][j];
+        }
+    }
+}
+
+Mat matriplus(){
     cout << "欢迎使用矩阵相加功能！\n ";
     cout << "请输入第一个矩阵：\n"
     Mat mat1 = readMat();
