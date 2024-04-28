@@ -80,6 +80,58 @@ Mat mat_hada_mult(Mat a, Mat b) {
     return res_mat;
 }
 
+Mat mat_cut(Mat a, int n_st, int n_ed, int m_st, int m_ed) {
+    Mat res_mat;
+    res_mat.n = n_ed - n_st + 1;
+    res_mat.m = m_ed - m_st + 1;
+    for (int i = 0; i < res_mat.n; i++)
+    {
+        for (int j = 0; j < res_mat.m; j++)
+        {
+            res_mat.value[i][j] = a.value[n_st + i][m_st + j];
+        }
+    }
+    return res_mat;
+}
+
+double mat_sum(Mat a) {
+    double sum = 0;
+    for (int i = 0; i < a.n; i++)
+    {
+        for (int j = 0; j < a.m; j++)
+        {
+            sum += a.value[i][j];
+        }
+    }
+    return sum;
+}
+
+Mat mat_conv(Mat a, Mat b, int kernel_size = 3, int padding = 1) // b是kernel
+{
+    Mat non_padding_mat;
+    non_padding_mat.n = a.n - b.n + 1;
+    non_padding_mat.m = a.m - b.m + 1;
+    for (int i = 0; i < non_padding_mat.n; i++)
+    {
+        for (int j = 0; j < non_padding_mat.m; j++)
+        {
+            Mat a_cut = mat_cut(a, i, i + kernel_size - 1, j, j + kernel_size - 1);
+            non_padding_mat.value[i][j] = mat_sum(mat_hada_mult(a_cut, b));
+        }
+    }
+    Mat padding_mat;
+    padding_mat.n = non_padding_mat.n + 2 * padding;
+    padding_mat.m = non_padding_mat.m + 2 * padding;
+    for (int i = 0; i < non_padding_mat.n; i++)
+    {
+        for (int j = 0; j < non_padding_mat.m; j++)
+        {
+            padding_mat.value[i + padding][j + padding] = non_padding_mat.value[i][j];
+        }
+    }
+    return padding_mat;
+}
+
 // 矩阵I/O
 Mat read_mat(int n = -1, int m = -1)
 {
@@ -177,5 +229,14 @@ void hadamulti()
 
 void conv()
 {
-    cout << "功能尚未实现，敬请期待！";
+    const int kernel_size = 3;
+    cout << "欢迎使用矩阵卷积功能！\n";
+    cout << "本功能的参数：kernel size = 3，padding = 1，stride = 1，dilation = 1；\n";
+    cout << "请输入矩阵 A:\n";
+    Mat a = read_mat();
+    cout << "请输入方阵 B(kernel), 行数与列数应该不大于A:\n";
+    Mat b = read_mat(kernel_size, kernel_size);
+    Mat res_mat = mat_conv(a, b, kernel_size);
+    cout << "矩阵卷积的结果是：\n";
+    show_mat(res_mat);
 }
