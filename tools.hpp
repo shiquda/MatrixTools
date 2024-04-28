@@ -65,6 +65,21 @@ Mat mat_mult(Mat a, Mat b) { // 默认认为矩阵是和规的，在上层函数检查
     }
     return res_mat;
 }
+
+Mat mat_hada_mult(Mat a, Mat b) {
+    Mat res_mat;
+    res_mat.n = a.n;
+    res_mat.m = a.m;
+    for (int i = 0; i < a.n; i++)
+    {
+        for (int j = 0; j < a.m; j++)
+        {
+            res_mat.value[i][j] = a.value[i][j] * b.value[i][j];
+        }
+    }
+    return res_mat;
+}
+
 // 矩阵I/O
 Mat read_mat(int n = -1, int m = -1)
 {
@@ -150,8 +165,16 @@ void matrimulti()
 
 void hadamulti()
 {
-    cout << "功能尚未实现，敬请期待！";
+    cout << "欢迎使用矩阵 Hadamard 乘积功能！\n";
+    cout << "请输入第一个矩阵：\n";
+    Mat mat1 = read_mat();
+    cout << "请输入第二个矩阵：\n";
+    Mat mat2 = read_mat(mat1.n, mat1.m);
+    Mat res_mat = mat_add(mat1, mat2);
+    cout << "矩阵 Hadamard 乘积的结果是：\n";
+    show_mat(res_mat);
 }
+
 void conv()
 {
     cout << "功能尚未实现，敬请期待！";
