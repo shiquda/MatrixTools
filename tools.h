@@ -20,8 +20,8 @@ Mat readMat(int n= -1, int m =  -1){
 }
 
 void showMat(mat a){
-    for(int i = 0;i<n;i++){
-        for(int j = 0;j<m;j++){
+    for(int i = 0;i<a.n;i++){
+        for(int j = 0;j<a.m;j++){
             cout << a.value[i][j];
         }
     }
