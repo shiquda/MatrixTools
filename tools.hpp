@@ -9,6 +9,7 @@ struct Mat
     double value[MAT_LEN][MAT_LEN]{0};
 };
 
+// 矩阵基本操作
 Mat mat_add(Mat a, Mat b) { // 默认认为矩阵是和规的，在上层函数检查
     Mat res_mat;
     res_mat.n = a.n;
@@ -34,6 +35,21 @@ Mat mat_num_multi(double k, Mat a) { // 默认认为矩阵是和规的，在上层函数检查
     return a;
 }
 
+Mat mat_transpose(Mat a) {
+    Mat res_mat;
+    res_mat.m = a.n;
+    res_mat.n = a.m;
+    for (int i = 0; i < a.n; i++)
+    {
+        for (int j = 0; j < a.m; j++)
+        {
+            res_mat.value[j][i] = a.value[i][j];
+        }
+    }
+    return res_mat;
+}
+
+// 矩阵I/O
 Mat read_mat(int n = -1, int m = -1)
 {
     if (n == -1 && m == -1) // 默认需要用户输入行数和列数
@@ -68,6 +84,7 @@ void show_mat(Mat a)
     }
 }
 
+// 功能函数
 void matriplus()
 {
     cout << "欢迎使用矩阵相加功能！\n";
@@ -92,9 +109,15 @@ void nummulti()
     cout << "数乘的结果是：\n";
     show_mat(a);
 }
+
 void matritrans()
 {
-    cout << "功能尚未实现，敬请期待！";
+    cout << "欢迎使用矩阵转置功能！\n ";
+    cout << "请输入矩阵：\n";
+    Mat a = read_mat();
+    a = mat_transpose(a);
+    cout << "转置的结果是：\n";
+    show_mat(a);
 }
 
 void matrimulti()
