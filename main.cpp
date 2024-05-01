@@ -2,8 +2,8 @@
 #include <iostream>
 
 #include "tools.hpp"
-// #include <opencv2/opencv.hpp>
-// using namespace cv;
+#include <opencv2/opencv.hpp>
+using namespace cv;
 using namespace std;
 
 void wait_for_enter()
@@ -42,10 +42,10 @@ char menu()
 void demo()
 {
     // /* 对vs+opencv正确配置后方可使用，此处只给出一段读取并显示图像的参考代码，其余功能流程自行设计和查阅文献 */
-    // Mat image =
-    //     imread("demolena.jpg"); // 图像的灰度值存放在格式为Mat的变量image中
-    // imshow("Image-original", image);
-    // waitKey(0);
+     Mat image =
+         imread("demolena.jpg"); // 图像的灰度值存放在格式为Mat的变量image中
+     imshow("Image-original", image);
+     waitKey(0);
 
     // 提示：Mat格式可与数组相互转换
 
