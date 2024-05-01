@@ -16,7 +16,7 @@ void wait_for_enter()
          << endl;
 }
 
-void menu()
+char menu()
 {
     cout << "欢迎使用 Matrix Tools! Created with love by @shiquda\n"
         <<    
@@ -27,11 +27,17 @@ void menu()
  | |  | | | (_| | | |_  | |    | |  >  <      | |   | (_) | | (_) | | | \__ \ |_|
  |_|  |_|  \__,_|  \__| |_|    |_| /_/\_\     |_|    \___/   \___/  |_| |___/ (_)                                                                      
  )"
-         << "请选择功能：\n1 矩阵相加\t2 矩阵数乘\t3 矩阵转置\n"
-        "4 矩阵相乘\t5 矩阵 Hadamard 乘积\t6 矩阵卷积 \n"
-        "7 \t8 \t9 \n"
-        "0 退出程序\n"
-         << "请输入功能 (0~9): ";
+         << "请选择功能：\n"
+        "*********************************************************\n"
+        "*\t1 矩阵相加\t2 矩阵数乘\t3 矩阵转置\t*\n"
+        "*\t4 矩阵相乘\t5 Hadamard乘积\t6 矩阵卷积\t*\n"
+        "*\t7 \t8 \t9\t\t\t\t*\n"
+        "*\t0 退出程序\t\t\t\t\t*\n"
+        "*********************************************************\n"
+         << "请选择功能 (0~9): ";
+    int ch;
+    ch = _getch();
+    return ch;
 }
 void demo()
 {
@@ -51,15 +57,13 @@ int main()
     while (true)
     {
         system("cls");
-
-        menu();
         char choice;
-        cin >> choice;
+        choice = menu();
         if (choice == '0') // 选择退出
         {
-            cout << "\n 确定退出吗? 确认请输入Y，输入任意其他键则取消退出：" << endl;
+            cout << "\n 确定退出吗? 确认请按Y，按下任意其他键则取消退出：" << endl;
             char ch;
-            cin >> ch;
+            ch = _getch();
             if (ch == 'y' || ch == 'Y') {
                 cout << "Bye~\n";
                 break;
