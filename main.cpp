@@ -60,6 +60,7 @@ int main()
             else continue;
         }
 
+        bool need_pause = 1;
         system("cls");
         switch (choice)
         {
