@@ -5,7 +5,7 @@ using namespace cv;
 
 Mat cv_mat_conv(Mat a, Mat b, int kernel_size = 3, int padding = 1) {
     Mat result;
-    // 卷积操作，可以直接调库
+    // 卷积操作
     filter2D(a, result, -1, b, Point(-1, -1), 0, BORDER_CONSTANT);
 
     // 添加填充
@@ -43,6 +43,53 @@ void demo() {
     {
         Mat convolutedImage = cv_mat_conv(image, kernels[i]);
         imshow("Convoluted Image", convolutedImage);
+        waitKey(0);
+    }
+}
+
+void otsu() {
+    // 加载图像
+    Mat img = imread("demolena.jpg", IMREAD_GRAYSCALE);
+    if (img.empty()) {
+        std::cout << "Failed to load image!" << std::endl;
+        return;
+    }
+
+    Mat dst;
+
+    // 应用Otsu算法
+    double thresh_val = threshold(img, dst, 0, 255, THRESH_BINARY | THRESH_OTSU);
+
+
+    //std::cout << "Optimal threshold value is: " << thresh_val << std::endl;
+
+    imshow("Otsu Thresholding", dst);
+    waitKey(0);
+}
+
+void seperate() {
+    string paths[4]{ "snowball.jpg", "polyhedrosis.jpg", "ship.jpg", "brain.jpg" };
+    for (int i = 0; i < 4; i++)
+    {
+        // 预处理去噪
+
+        Mat img = imread(paths[i], IMREAD_GRAYSCALE);
+        if (img.empty()) {
+            std::cout << "Failed to load image!" << std::endl;
+            return;
+        }
+        imshow("raw image", img);
+
+
+        GaussianBlur(img, img, Size(3, 3), 0);
+
+        imshow("blur image", img);
+
+        Mat dst;
+
+        // 应用Otsu算法
+        double thresh_val = threshold(img, dst, 0, 255, THRESH_BINARY | THRESH_OTSU);
+        imshow("OTSU imgge", dst);
         waitKey(0);
     }
 }

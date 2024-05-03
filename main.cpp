@@ -31,7 +31,7 @@ char menu()
         "*********************************************************\n"
         "*\t1 矩阵相加\t2 矩阵数乘\t3 矩阵转置\t*\n"
         "*\t4 矩阵相乘\t5 Hadamard乘积\t6 矩阵卷积\t*\n"
-        "*\t7 \t8 \t9\t\t\t\t*\n"
+        "*\t7 卷积应用\t8 OTSU 算法\t9 背景分离\t*\n"
         "*\t0 退出程序\t\t\t\t\t*\n"
         "*********************************************************\n"
          << "请选择功能 (0~9): ";
@@ -50,7 +50,7 @@ int main()
         choice = menu();
         if (choice == '0') // 选择退出
         {
-            cout << "\n 确定退出吗? 确认请按Y，按下任意其他键则取消退出：" << endl;
+            cout << "\n确定退出吗? 确认请按Y，按下任意其他键则取消退出：" << endl;
             char ch;
             ch = _getch();
             if (ch == 'y' || ch == 'Y') {
@@ -60,8 +60,10 @@ int main()
             else continue;
         }
 
+        bool need_pause = 1;
         switch (choice)
         {
+            
         case '1':
             system("cls");
             matriplus();
@@ -86,16 +88,25 @@ int main()
             system("cls");
             conv();
             break;
-         case '7':
-         system("cls");
-             demo();
+        case '7':
+            system("cls");
+            demo();
              break;
+        case '8':
+            system("cls");
+            otsu();
+            break;
+        case '9':
+            system("cls");
+            seperate();
+            break;
         default:
             system("cls");
             cout << "输入错误，请再次输入！\n" << endl;
             menu();
+            need_pause = 0;
         }
-        wait_for_enter();
+        if (need_pause) wait_for_enter();
     }
     return 0;
 }
