@@ -139,6 +139,14 @@ Matrix read_mat(int n = -1, int m = -1)
     {
         cout << "请输入行数和列数，中间以空格分割：";
         cin >> n >> m;
+        if (cin.fail() || n <= 0 || m <= 0)
+        {
+            cin.clear();
+            cin.ignore();
+            system("cls");
+            cout << "输入有误，请检查输入！\n";
+            return read_mat(); // 递归重新开始输入
+        }
     }
 
     cout << "请输入一个 " << n << " 行 " << m << " 列的矩阵, 数字之间以空格分割: \n";
@@ -150,6 +158,14 @@ Matrix read_mat(int n = -1, int m = -1)
         for (int j = 0; j < matrix.m; j++)
         {
             cin >> matrix.value[i][j];
+            if (cin.fail())
+            {
+                cin.clear();
+                cin.ignore();
+                system("cls");
+                cout << "输入有误，请检查输入！\n";
+                return read_mat(n, m); // 递归重新开始输入
+            }
         }
     }
     return matrix;
