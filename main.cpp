@@ -61,52 +61,40 @@ int main()
         }
 
         bool need_pause = 1;
+        system("cls");
         switch (choice)
         {
-            
         case '1':
-            system("cls");
             matriplus();
             break;
         case '2':
-            system("cls");
             nummulti();
             break;
         case '3':
-            system("cls");
             matritrans();
             break;
         case '4':
-            system("cls");
             matrimulti();
             break;
         case '5':
-            system("cls");
             hadamulti();
             break;
         case '6':
-            system("cls");
             conv();
             break;
         case '7':
-            system("cls");
             demo();
              break;
         case '8':
-            system("cls");
             otsu();
             break;
         case '9':
-            system("cls");
             seperate();
             break;
         default:
-            system("cls");
             cout << "输入错误，请再次输入！\n" << endl;
-            menu();
-            need_pause = 0;
         }
-        if (need_pause) wait_for_enter();
+        wait_for_enter();
     }
     return 0;
 }
