@@ -1,13 +1,67 @@
+#ifndef TOOLS_HPP
+#define TOOLS_HPP
+
 #include <iostream>
 using namespace std;
 
-const int MAT_LEN = 10;
+const int MAT_LEN = 512;
 
 struct Matrix
 {
     int m, n; // 长度
-    double value[MAT_LEN][MAT_LEN]{0};
+    double value[MAT_LEN][MAT_LEN]{0}; // 初始化为0
 };
+
+// 矩阵I/O
+Matrix read_mat(int n = -1, int m = -1)
+{
+    if (n == -1 && m == -1) // 默认需要用户输入行数和列数
+    {
+        cout << "请输入行数和列数，中间以空格分割：";
+        cin >> n >> m;
+        if (cin.fail() || n <= 0 || m <= 0)
+        {
+            cin.clear();
+            cin.ignore();
+            system("cls");
+            cout << "输入有误，请检查输入！\n";
+            return read_mat(); // 递归重新开始输入
+        }
+    }
+
+    cout << "请输入一个 " << n << " 行 " << m << " 列的矩阵, 数字之间以空格分割: \n";
+    Matrix matrix;
+    matrix.n = n;
+    matrix.m = m;
+    for (int i = 0; i < matrix.n; i++)
+    {
+        for (int j = 0; j < matrix.m; j++)
+        {
+            cin >> matrix.value[i][j];
+            if (cin.fail())
+            {
+                cin.clear();
+                cin.ignore();
+                system("cls");
+                cout << "输入有误，请检查输入！\n";
+                return read_mat(n, m); // 递归重新开始输入
+            }
+        }
+    }
+    return matrix;
+}
+
+void show_mat(Matrix a)
+{
+    for (int i = 0; i < a.n; i++)
+    {
+        for (int j = 0; j < a.m; j++)
+        {
+            cout << a.value[i][j] << ' ';
+        }
+        cout << '\n';
+    }
+}
 
 // 矩阵基本操作
 Matrix mat_add(Matrix a, Matrix b) { // 默认认为矩阵是和规的，在上层函数检查
@@ -108,80 +162,38 @@ double mat_sum(Matrix a) {
 
 Matrix mat_conv(Matrix a, Matrix b, int kernel_size = 3, int padding = 1) // b是kernel
 {
-    Matrix non_padding_mat;
-    non_padding_mat.n = a.n - b.n + 1;
-    non_padding_mat.m = a.m - b.m + 1;
-    for (int i = 0; i < non_padding_mat.n; i++)
-    {
-        for (int j = 0; j < non_padding_mat.m; j++)
-        {
-            Matrix a_cut = mat_cut(a, i, i + kernel_size - 1, j, j + kernel_size - 1);
-            non_padding_mat.value[i][j] = mat_sum(mat_hada_mult(a_cut, b));
-        }
-    }
     Matrix padding_mat;
-    padding_mat.n = non_padding_mat.n + 2 * padding;
-    padding_mat.m = non_padding_mat.m + 2 * padding;
-    for (int i = 0; i < non_padding_mat.n; i++)
-    {
-        for (int j = 0; j < non_padding_mat.m; j++)
-        {
-            padding_mat.value[i + padding][j + padding] = non_padding_mat.value[i][j];
-        }
-    }
-    return padding_mat;
-}
+    padding_mat.n = a.n - b.n + 1 + 2 * padding;
+    padding_mat.m = a.m - b.m + 1 + 2 * padding;
+    double kernel_sum = mat_sum(b);
 
-// 矩阵I/O
-Matrix read_mat(int n = -1, int m = -1)
-{
-    if (n == -1 && m == -1) // 默认需要用户输入行数和列数
+    for (int i = padding; i < padding_mat.n - padding; i++)
     {
-        cout << "请输入行数和列数，中间以空格分割：";
-        cin >> n >> m;
-        if (cin.fail() || n <= 0 || m <= 0)
+        for (int j = padding; j < padding_mat.m - padding; j++)
         {
-            cin.clear();
-            cin.ignore();
-            system("cls");
-            cout << "输入有误，请检查输入！\n";
-            return read_mat(); // 递归重新开始输入
-        }
-    }
-
-    cout << "请输入一个 " << n << " 行 " << m << " 列的矩阵, 数字之间以空格分割: \n";
-    Matrix matrix;
-    matrix.n = n;
-    matrix.m = m;
-    for (int i = 0; i < matrix.n; i++)
-    {
-        for (int j = 0; j < matrix.m; j++)
-        {
-            cin >> matrix.value[i][j];
-            if (cin.fail())
+            //if (kernel_sum == 0) padding_mat.value[i][j] = 128;
+            for (int ik = 0; ik < b.n; ik++)
             {
-                cin.clear();
-                cin.ignore();
-                system("cls");
-                cout << "输入有误，请检查输入！\n";
-                return read_mat(n, m); // 递归重新开始输入
+                for (int jk = 0; jk < b.m; jk++)
+                {
+                    padding_mat.value[i][j] += b.value[ik][jk] * a.value[i - 1 + ik][j - 1 + jk];
+                }
+            }
+            if (kernel_sum != 0) padding_mat.value[i][j] /= kernel_sum;
+            if (padding_mat.value[i][j] > 255) // 超过边界处理
+            {
+                padding_mat.value[i][j] = 255;
+            }
+            if (padding_mat.value[i][j] < 0) {
+                padding_mat.value[i][j] = 0;
             }
         }
     }
-    return matrix;
+    show_mat(b);
+    return padding_mat;
 }
 
-void show_mat(Matrix a)
-{
-    for (int i = 0; i < a.n; i++)
-    {
-        for (int j = 0; j < a.m; j++)
-        {
-            cout << a.value[i][j] << ' ';
-        }
-        cout << '\n';
-    }
-}
+
 
 // 功能函数
 void matriplus()
@@ -269,3 +281,5 @@ void conv_application() {
     cout << "矩阵卷积的结果是：\n";
     show_mat(res_mat);
 }
+
+#endif
