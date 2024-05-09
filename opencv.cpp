@@ -1,16 +1,14 @@
-#ifndef OPENCV_HPP
-#define OPENCV_HPP
+#include "tools.hpp"
+#include "opencv.hpp"
 
 #include <opencv2/opencv.hpp>
-#include <iostream>
 
-#include "tools.hpp"
-
+using namespace std;
 using namespace cv;
-
 // 转换
 
-Matrix convert_mat_to_matrix(Mat a) {
+Matrix convert_mat_to_matrix(cv::Mat a) {
+
     Matrix img;
     img.n = a.rows;
     img.m = a.cols;
@@ -37,8 +35,9 @@ Matrix convert_mat_to_matrix(Mat a) {
     return img;
 }
 
-Mat convert_matrix_to_mat(Matrix img) {
-    Mat a(img.n, img.m, CV_8U);
+cv::Mat convert_matrix_to_mat(Matrix img) {
+    using namespace cv;
+    cv::Mat a(img.n, img.m, CV_8U);
 
     for (int i = 0; i < img.n; i++) {
         for (int j = 0; j < img.m; j++) {
@@ -50,7 +49,7 @@ Mat convert_matrix_to_mat(Matrix img) {
 }
 
 
-Mat cv_mat_conv(Mat a, Mat b, int kernel_size = 3, int padding = 1, bool use_opencv = 0) {
+cv::Mat cv_mat_conv(cv::Mat a, cv::Mat b, int kernel_size, int padding, bool use_opencv) {
     if (use_opencv)
     {
         Scalar kernel_sum = sum(b);
@@ -58,12 +57,12 @@ Mat cv_mat_conv(Mat a, Mat b, int kernel_size = 3, int padding = 1, bool use_ope
         {
             b = b / kernel_sum[0];
         }
-        Mat result;
+        cv::Mat result;
         // 卷积操作
         filter2D(a, result, -1, b, Point(-1, -1), 0, BORDER_CONSTANT);
 
         //添加填充
-        Mat paddedResult;
+        cv::Mat paddedResult;
         copyMakeBorder(result, paddedResult, padding, padding, padding, padding, BORDER_CONSTANT);
 
         return paddedResult;
@@ -72,27 +71,27 @@ Mat cv_mat_conv(Mat a, Mat b, int kernel_size = 3, int padding = 1, bool use_ope
     {
         Matrix ma = convert_mat_to_matrix(a);
         Matrix mb = convert_mat_to_matrix(b);
-        Matrix result = mat_conv(ma, mb, kernel_size, padding);
+        Matrix result = mat_conv(ma, mb, kernel_size, padding, 1);
         return convert_matrix_to_mat(result);
     }
 
 }
 
 void demo() {
-    Mat image = imread("demolena.jpg", IMREAD_GRAYSCALE);  // 以灰度模式读取图像
+    cv::Mat image = imread("demolena.jpg", IMREAD_GRAYSCALE);  // 以灰度模式读取图像
     if (image.empty()) {
         std::cout << "Failed to load image!" << std::endl;
         return;
     }
 
-    Mat B1 = (Mat_<double>(3, 3) << 1, 1, 1, 1, 1, 1, 1, 1, 1);
-    Mat B2 = (Mat_<double>(3, 3) << -1, -2, -1, 0, 0, 0, 1, 2, 1);
-    Mat B3 = (Mat_<double>(3, 3) << -1, 0, 1, -2, 0, 2, -1, 0, 1);
-    Mat B4 = (Mat_<double>(3, 3) << -1, -1, -1, -1, 9, -1, -1, -1, -1);
-    Mat B5 = (Mat_<double>(3, 3) << -1, -1, 0, -1, 0, 1, 0, 1, 1);
-    Mat B6 = (Mat_<double>(3, 3) << 1, 2, 1, 2, 4, 2, 1, 2, 1);
+    cv::Mat B1 = (Mat_<double>(3, 3) << 1, 1, 1, 1, 1, 1, 1, 1, 1);
+    cv::Mat B2 = (Mat_<double>(3, 3) << -1, -2, -1, 0, 0, 0, 1, 2, 1);
+    cv::Mat B3 = (Mat_<double>(3, 3) << -1, 0, 1, -2, 0, 2, -1, 0, 1);
+    cv::Mat B4 = (Mat_<double>(3, 3) << -1, -1, -1, -1, 9, -1, -1, -1, -1);
+    cv::Mat B5 = (Mat_<double>(3, 3) << -1, -1, 0, -1, 0, 1, 0, 1, 1);
+    cv::Mat B6 = (Mat_<double>(3, 3) << 1, 2, 1, 2, 4, 2, 1, 2, 1);
 
-    Mat kernels[6]{ B1, B2, B3, B4, B5, B6 };
+    cv::Mat kernels[6]{ B1, B2, B3, B4, B5, B6 };
     //for (int i = 0; i < image.rows; i++)
     //{
     //    for (int j = 0; j < image.cols; j++)
@@ -101,24 +100,33 @@ void demo() {
     //    }
     //    cout << '\n';
     //}
+    //auto start = std::chrono::high_resolution_clock::now();
+
+    //cv_mat_conv(image, kernels[0], 3, 1, 1);
+
+    //auto end = std::chrono::high_resolution_clock::now();
+
+    //std::chrono::duration<double> diff = end - start;
+
+    //std::cout << "Function took " << diff.count() << " seconds to run" << std::endl;
 
     for (int i = 0; i < 6; i++)
     {
-        Mat convolutedImage = cv_mat_conv(image, kernels[i], 3, 1, 0);
-        imshow("Convoluted Image", convolutedImage);
+        cv::Mat convolutedImage = cv_mat_conv(image, kernels[i], 3, 1, 0);
+        imshow("Convoluted Image ", convolutedImage);
         waitKey(0);
     }
 }
 
 void otsu() {
     // 加载图像
-    Mat img = imread("demolena.jpg", IMREAD_GRAYSCALE);
+    cv::Mat img = imread("demolena.jpg", IMREAD_GRAYSCALE);
     if (img.empty()) {
         std::cout << "Failed to load image!" << std::endl;
         return;
     }
 
-    Mat dst;
+    cv::Mat dst;
 
     // 应用Otsu算法
     double thresh_val = threshold(img, dst, 0, 255, THRESH_BINARY | THRESH_OTSU);
@@ -136,7 +144,7 @@ void seperate() {
     {
         // 预处理去噪
 
-        Mat img = imread(paths[i], IMREAD_GRAYSCALE);
+        cv::Mat img = imread(paths[i], IMREAD_GRAYSCALE);
         if (img.empty()) {
             std::cout << "Failed to load image!" << std::endl;
             return;
@@ -148,7 +156,7 @@ void seperate() {
 
         imshow("blur image", img);
 
-        Mat dst;
+        cv::Mat dst;
 
         // 应用Otsu算法
         double thresh_val = threshold(img, dst, 0, 255, THRESH_BINARY | THRESH_OTSU);
@@ -156,5 +164,3 @@ void seperate() {
         waitKey(0);
     }
 }
-
-#endif
